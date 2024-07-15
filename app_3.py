@@ -38,7 +38,7 @@ app = FastAPI()
 def health_check():
     return {"status": "healthy"}
 
-# Operaciones CRUD
+# Operaciones CRUD 
 
 # Leer un elemento específico de la tabla
 @app.get("/items/{item_id}", response_model=Item)

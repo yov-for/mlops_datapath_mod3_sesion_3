@@ -70,8 +70,13 @@ def create_item(item: ItemCreate):
         session.commit()
         created_item_id = result.inserted_primary_key[0]
         created_item = session.execute(select(items).where(items.c.id == created_item_id)).fetchone()
+
+        if created_item is None:
+                raise Exception(f"Item with ID {created_item_id} not found in database.")
+        
         return created_item._mapping
 
+    
 # Actualizar un elemento existente en la tabla
 @app.put("/items/{item_id}", response_model=Item)
 def update_item(item_id: int, item: ItemUpdate):

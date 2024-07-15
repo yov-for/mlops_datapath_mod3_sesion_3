@@ -1,12 +1,12 @@
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, status, Depends
 from pydantic import BaseModel
 from sqlalchemy import create_engine, MetaData, Table
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql import select
-import os
+from sqlalchemy.exc import OperationalError
 
 # Configurar la base de datos
-SQLALCHEMY_DATABASE_URL = "mysql://root:oPSVRAmBkVLNUTcrQGJARmHEIOAjpiUL@roundhouse.proxy.rlwy.net:57723/railway"
+SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:oPSVRAmBkVLNUTcrQGJARmHEIOAjpiUL@roundhouse.proxy.rlwy.net:57723/railway"
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 metadata = MetaData()
  
@@ -35,9 +35,22 @@ class ItemUpdate(ItemCreate):
 # Inicializar la aplicación FastAPI
 app = FastAPI()
 
-@app.get("/health")
-def health_check():
-    return {"status": "healthy"}
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+@app.get("/health", status_code=200, include_in_schema=False)
+def health_check(db=Depends(get_db)):
+    """Este es el endpoint de verificación de salud"""
+    try:
+        # Verificar la conexión a la base de datos
+        db.execute("SELECT 1")
+    except OperationalError:
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Database is unavailable")
+    return {"status": "ok"}
 
 # Operaciones CRUD 
 

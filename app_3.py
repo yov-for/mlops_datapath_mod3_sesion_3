@@ -16,21 +16,6 @@ items = Table("items", metadata, autoload_with=engine)
 # Configurar la sesión de SQLAlchemy
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# Definir los modelos Pydantic
-class Item(BaseModel):
-    id: int
-    name: str
-    description: str = None
-
-    class Config: 
-        orm_mode = True
-
-class ItemCreate(BaseModel):
-    name: str
-    description: str = None
-
-class ItemUpdate(ItemCreate):
-    pass
 
 # Inicializar la aplicación FastAPI
 app = FastAPI()
@@ -53,6 +38,23 @@ def health_check(db=Depends(get_db)):
     return {"status": "ok"}
 
 # Operaciones CRUD 
+
+# Definir los modelos Pydantic
+class Item(BaseModel):
+    id: int
+    name: str
+    description: str = None
+
+    class Config:
+        orm_mode = True
+
+class ItemCreate(BaseModel):
+    name: str
+    description: str = None
+
+class ItemUpdate(ItemCreate):
+    pass
+
 
 # Leer un elemento específico de la tabla
 @app.get("/items/{item_id}", response_model=Item)

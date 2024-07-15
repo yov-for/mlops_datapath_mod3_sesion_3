@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from sqlalchemy import create_engine, MetaData, Table
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql import select
+import os
 
 # Configurar la base de datos
 SQLALCHEMY_DATABASE_URL = "mysql://root:oPSVRAmBkVLNUTcrQGJARmHEIOAjpiUL@roundhouse.proxy.rlwy.net:57723/railway"

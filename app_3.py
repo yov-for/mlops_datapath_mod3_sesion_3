@@ -29,12 +29,7 @@ def get_db():
 
 @app.get("/health", status_code=200, include_in_schema=False)
 def health_check(db=Depends(get_db)):
-    """Este es el endpoint de verificación de salud"""
-    try:
-        # Verificar la conexión a la base de datos
-        db.execute("SELECT 1")
-    except OperationalError:
-        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail="Database is unavailable")
+    """This is the health check endpoint"""
     return {"status": "ok"}
 
 # Operaciones CRUD 

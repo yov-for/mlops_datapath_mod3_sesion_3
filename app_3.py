@@ -8,7 +8,7 @@ from sqlalchemy.sql import select
 SQLALCHEMY_DATABASE_URL = "mysql://root:oPSVRAmBkVLNUTcrQGJARmHEIOAjpiUL@roundhouse.proxy.rlwy.net:57723/railway"
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 metadata = MetaData()
-
+ 
 # Cargar la tabla existente
 items = Table("items", metadata, autoload_with=engine)
 
@@ -21,7 +21,7 @@ class Item(BaseModel):
     name: str
     description: str = None
 
-    class Config:
+    class Config: 
         orm_mode = True
 
 class ItemCreate(BaseModel):

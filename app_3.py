@@ -6,8 +6,7 @@ from sqlalchemy.sql import select
 from sqlalchemy.exc import OperationalError
 
 # Configurar la base de datos
-#SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:oPSVRAmBkVLNUTcrQGJARmHEIOAjpiUL@roundhouse.proxy.rlwy.net:57723/railway"
-SQLALCHEMY_DATABASE_URL = "mysql://root:oPSVRAmBkVLNUTcrQGJARmHEIOAjpiUL@roundhouse.proxy.rlwy.net:57723/railway"
+SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:oPSVRAmBkVLNUTcrQGJARmHEIOAjpiUL@roundhouse.proxy.rlwy.net:57723/railway"
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 metadata = MetaData()
  

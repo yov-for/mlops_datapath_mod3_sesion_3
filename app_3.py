@@ -10,6 +10,9 @@ from io import StringIO
 import pandas as pd
 from joblib import load
 
+from models import Prediction, Base
+from sqlalchemy.orm import Session
+
 # Configurar la base de datos
 SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:bYRfsLkuqhRiJsYGMjNRZGSLFkBskXiz@monorail.proxy.rlwy.net:20159/railway"
 
@@ -124,18 +127,36 @@ def get_items(skip: int = 0, limit: int = 10):
 
 
 @app.post("/predict")
-async def predict_bancknote(file: UploadFile = File(...)):
+async def predict_bancknote(file: UploadFile = File(...), db: Session = Depends(get_db)):
+    # Cargar el clasificador y los datos de características
     classifier = load("linear_regression.joblib")
-    
     features_df = pd.read_csv('selected_features.csv')
     features = features_df['0'].to_list()
 
+    # Leer el archivo subido y prepararlo para la predicción
     contents = await file.read()
     df = pd.read_csv(StringIO(contents.decode('utf-8')))
     df = df[features]
 
+    # Hacer la predicción
     predictions = classifier.predict(df)
+
+    # Crear un DataFrame con las predicciones
+    results_df = pd.DataFrame({
+        "file_name": file.filename,
+        "prediction": predictions
+    })
+
+    # Guardar las predicciones en la base de datos
+    for _, row in results_df.iterrows():
+        prediction_entry = Prediction(
+            file_name=row["file_name"],
+            prediction=row["prediction"]
+        )
+        db.add(prediction_entry)
     
+    db.commit()
+
     return {
         "predictions": predictions.tolist()
     }

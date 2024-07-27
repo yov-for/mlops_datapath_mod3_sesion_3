@@ -9,4 +9,4 @@ class Prediction(Base):
     id = Column(Integer, primary_key=True, index=True)
     file_name = Column(String, nullable=False)
     prediction = Column(Float, nullable=False)
-    created_at = Column(TIMESTAMP, server_default=func.now())
+    created_at = Column(TIMESTAMP, nullable=False)

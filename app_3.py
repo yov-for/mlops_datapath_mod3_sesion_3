@@ -12,6 +12,8 @@ from joblib import load
 
 from models import Prediction, Base
 from sqlalchemy.orm import Session
+from datetime import datetime
+import pytz
 
 # Configurar la base de datos
 SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:bYRfsLkuqhRiJsYGMjNRZGSLFkBskXiz@monorail.proxy.rlwy.net:20159/railway"
@@ -139,11 +141,15 @@ async def predict_bancknote(file: UploadFile = File(...), db: Session = Depends(
     
     predictions = classifier.predict(df)
 
+    lima_tz = pytz.timezone('America/Lima')
+    now = datetime.now(lima_tz)
+
     # Guardar los resultados en la base de datos
     for i, prediction in enumerate(predictions):
         prediction_entry = Prediction(
             file_name=file.filename,
-            prediction=prediction
+            prediction=prediction,
+            created_at=now   
         )
         db.add(prediction_entry)
     

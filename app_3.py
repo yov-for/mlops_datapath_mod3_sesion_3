@@ -42,7 +42,7 @@ def get_db():
 def health_check(db=Depends(get_db)):
     """This is the health check endpoint"""
     return {"status": "ok"}
-
+ 
 # Operaciones CRUD 
 
 # Definir los modelos Pydantic

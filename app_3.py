@@ -143,8 +143,7 @@ async def predict_bancknote(file: UploadFile = File(...), db: Session = Depends(
 
     lima_tz = pytz.timezone('America/Lima')
     now = datetime.now(lima_tz)
-
-    # Guardar los resultados en la base de datos
+ 
     for i, prediction in enumerate(predictions):
         prediction_entry = Prediction(
             file_name=file.filename,

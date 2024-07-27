@@ -4,6 +4,9 @@ from sqlalchemy import create_engine, MetaData, Table
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql import select
 
+# from pyngrok import ngrok
+# import nest_asyncio
+
 # Configurar la base de datos
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
@@ -99,3 +102,7 @@ def get_items(skip: int = 0, limit: int = 10):
         query = select(items).offset(skip).limit(limit)
         results = session.execute(query).fetchall()
         return [result._mapping for result in results]
+
+
+# ngrok_tunnel = ngrok.connect(8000)
+# print('Public URL:', ngrok_tunnel.public_url)

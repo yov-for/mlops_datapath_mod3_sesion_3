@@ -5,8 +5,14 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql import select
 from sqlalchemy.exc import OperationalError
 
+from fastapi import FastAPI, File, UploadFile
+from io import StringIO
+import pandas as pd
+from joblib import load
+
 # Configurar la base de datos
-SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:oPSVRAmBkVLNUTcrQGJARmHEIOAjpiUL@roundhouse.proxy.rlwy.net:57723/railway"
+SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:bYRfsLkuqhRiJsYGMjNRZGSLFkBskXiz@monorail.proxy.rlwy.net:20159/railway"
+
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 metadata = MetaData()
  
@@ -115,3 +121,21 @@ def get_items(skip: int = 0, limit: int = 10):
         query = select(items).offset(skip).limit(limit)
         results = session.execute(query).fetchall()
         return [result._mapping for result in results]
+
+
+@app.post("/predict")
+async def predict_bancknote(file: UploadFile = File(...)):
+    classifier = load("linear_regression.joblib")
+    
+    features_df = pd.read_csv('selected_features.csv')
+    features = features_df['0'].to_list()
+
+    contents = await file.read()
+    df = pd.read_csv(StringIO(contents.decode('utf-8')))
+    df = df[features]
+
+    predictions = classifier.predict(df)
+    
+    return {
+        "predictions": predictions.tolist()
+    }

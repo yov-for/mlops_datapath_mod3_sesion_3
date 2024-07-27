@@ -142,7 +142,7 @@ async def predict_bancknote(file: UploadFile = File(...), db: Session = Depends(
     # Guardar los resultados en la base de datos
     for i, prediction in enumerate(predictions):
         prediction_entry = Prediction(
-            file_name=f"{file.filename}_{i}",
+            file_name=file.filename,
             prediction=prediction
         )
         db.add(prediction_entry)

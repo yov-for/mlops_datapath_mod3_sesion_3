@@ -25,7 +25,7 @@ class Item(BaseModel):
     description: str = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class ItemCreate(BaseModel):
     name: str
@@ -37,9 +37,9 @@ class ItemUpdate(ItemCreate):
 # Inicializar la aplicación FastAPI
 app = FastAPI()
 
-@app.get("/health")
-def health_check():
-    return {"status": "healthy"}
+# @app.get("/health")
+# def health_check():
+#     return {"status": "healthy"}
 
 # Operaciones CRUD
 

@@ -15,7 +15,6 @@ import pytz
 
 # Configurar la base de datos
 SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:lgGiHKEKyIifdAnSznrKUeuKbvGUgrqs@junction.proxy.rlwy.net:44091/railway"
-
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 metadata = MetaData()
  
@@ -155,3 +154,4 @@ async def predict_bancknote(file: UploadFile = File(...), db: Session = Depends(
     return {
         "predictions": predictions.tolist()
     }
+

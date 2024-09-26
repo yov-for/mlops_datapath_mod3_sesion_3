@@ -1,9 +1,8 @@
 from fastapi import FastAPI, HTTPException, status, Depends
 from pydantic import BaseModel
 from sqlalchemy import create_engine, MetaData, Table
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.sql import select
-from sqlalchemy.exc import OperationalError
 
 from fastapi import FastAPI, File, UploadFile
 from io import StringIO
@@ -11,12 +10,11 @@ import pandas as pd
 from joblib import load
 
 from models import Prediction, Base
-from sqlalchemy.orm import Session
 from datetime import datetime
 import pytz
 
 # Configurar la base de datos
-SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:uiNiHnLWQJNNtZxLmAwJwIDPBVdvGjdg@monorail.proxy.rlwy.net:24987/railway"
+SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:lgGiHKEKyIifdAnSznrKUeuKbvGUgrqs@junction.proxy.rlwy.net:44091/railway"
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 metadata = MetaData()

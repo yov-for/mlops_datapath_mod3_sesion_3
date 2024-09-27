@@ -8,3 +8,8 @@ pandas
 pymysql
 python-multipart
 pyngrok
+
+
+PyJWT
+passlib
+bcrypt

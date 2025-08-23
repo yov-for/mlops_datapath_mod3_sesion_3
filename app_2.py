@@ -4,8 +4,6 @@ from sqlalchemy import create_engine, MetaData, Table
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql import select
 
-# from pyngrok import ngrok
-# import nest_asyncio
 
 # Configurar la base de datos
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"

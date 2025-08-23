@@ -9,7 +9,7 @@ from io import StringIO
 import pandas as pd
 from joblib import load
 
-from models import Prediction, Base
+# from models import Prediction, Base
 from datetime import datetime
 import pytz
 
@@ -126,7 +126,8 @@ def get_items(skip: int = 0, limit: int = 10):
 
 
 @app.post("/predict")
-async def predict_bancknote(file: UploadFile = File(...), db: Session = Depends(get_db)):
+async def predict_houseprice(file: UploadFile = File(...), db: Session = Depends(get_db)):
+
     classifier = load("linear_regression.joblib")
     
     features_df = pd.read_csv('selected_features.csv')
@@ -140,18 +141,15 @@ async def predict_bancknote(file: UploadFile = File(...), db: Session = Depends(
 
     lima_tz = pytz.timezone('America/Lima')
     now = datetime.now(lima_tz)
- 
-    for i, prediction in enumerate(predictions):
-        prediction_entry = Prediction(
-            file_name=file.filename,
-            prediction=prediction,
-            created_at=now   
-        )
-        db.add(prediction_entry)
     
-    db.commit()
+    predictions_df = pd.DataFrame({
+        'file_name': file.filename,
+        'prediction': predictions,
+        'created_at': now
+    })
     
+    predictions_df.to_sql('predictions', con=engine, if_exists='append', index=False)
+
     return {
         "predictions": predictions.tolist()
     }
-

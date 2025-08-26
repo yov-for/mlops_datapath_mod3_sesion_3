@@ -12,9 +12,11 @@ from joblib import load
 # from models import Prediction, Base
 from datetime import datetime
 import pytz
+import os
 
 # Configurar la base de datos
-SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:CByeYkKtvlOkqKQhwFlGUxZMpcQeLcCo@hopper.proxy.rlwy.net:18658/railway"
+# SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:CByeYkKtvlOkqKQhwFlGUxZMpcQeLcCo@hopper.proxy.rlwy.net:18658/railway"
+SQLALCHEMY_DATABASE_URL = os.environ.get("SQLALCHEMY_DATABASE_URL")
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 metadata = MetaData()
  
